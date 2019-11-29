@@ -1,4 +1,4 @@
-package pro.tman.pg.hibernate;
+package pro.trautmann.pg.hibernate;
 
 import java.io.IOException;
 import java.io.Reader;

@@ -1,4 +1,4 @@
-package pro.tman.pg.hibernate;
+package pro.trautmann.pg.hibernate;
 
 import static org.junit.Assert.fail;
 
@@ -12,6 +12,8 @@ import java.util.Arrays;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import pro.trautmann.pg.hibernate.PSQLCommandExtractor;
 
 
 public class PSQLCommandExtractorTest {

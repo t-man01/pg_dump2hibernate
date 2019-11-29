@@ -2,7 +2,7 @@
 
 /* A JFLex scanner for parsing postgresql dumps to extract jdbc commands*/
 
-package pro.tman.pg.hibernate;
+package pro.trautmann.pg.hibernate;
 
 import java.lang.StringBuffer;
 import java.util.ArrayList;
