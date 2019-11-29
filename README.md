@@ -71,7 +71,6 @@ I don't recommend this scenario for production environments. In this case think 
 This extractor uses [JFlex](https://jflex.de/docu.html) for scanning. To enhance the extractor
 * find and adapt jflex script `src/main/jflex/pg_dump.flex'
 * rebuild with maven profile `jflex`
-* Manually move generated java file from `target/generated-sources/jflex/`
 
 ## github
 
