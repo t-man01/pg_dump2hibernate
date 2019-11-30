@@ -6,7 +6,7 @@
 	<groupId>pro.trautmann</groupId>
 	<artifactId>pg_dump2hibernate</artifactId>
 	<url>https://github.com/t-man01/pg_dump2hibernate</url>
-	<version>0.0.3</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<developers>
