@@ -4,7 +4,6 @@
 
 package pro.trautmann.pg.hibernate;
 
-import java.lang.StringBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,14 +37,14 @@ class PSQLScanner {
    *                  at the beginning of a line
    * l is of the form l = 2*k, k a non negative integer
    */
-  private static final int ZZ_LEXSTATE[] = { 
+  private static final int ZZ_LEXSTATE[] = {
      0,  0,  1,  1,  2,  2,  3,  3,  4, 4
   };
 
-  /** 
+  /**
    * Translates characters to character classes
    */
-  private static final String ZZ_CMAP_PACKED = 
+  private static final String ZZ_CMAP_PACKED =
     "\11\0\1\5\1\2\1\0\1\5\1\1\22\0\1\12\1\0\1\37"+
     "\1\0\1\4\10\0\1\6\1\41\1\0\12\36\1\0\1\3\5\0"+
     "\1\16\1\36\1\14\1\22\1\10\1\30\1\25\1\36\1\36\1\36"+
@@ -189,12 +188,12 @@ class PSQLScanner {
     "\51\0\u1035\36\13\0\336\36\2\0\u1682\36\u295e\0\u021e\36\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\u06ed\0"+
     "\360\36\uffff\0\uffff\0\ufe12\0";
 
-  /** 
+  /**
    * Translates characters to character classes
    */
   private static final char [] ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);
 
-  /** 
+  /**
    * Translates DFA states to action switch labels.
    */
   private static final int [] ZZ_ACTION = zzUnpackAction();
@@ -226,7 +225,7 @@ class PSQLScanner {
   }
 
 
-  /** 
+  /**
    * Translates a state to a row index in the transition table
    */
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
@@ -265,7 +264,7 @@ class PSQLScanner {
     return j;
   }
 
-  /** 
+  /**
    * The transition table of the DFA
    */
   private static final int [] ZZ_TRANS = zzUnpackTrans();
@@ -422,12 +421,12 @@ class PSQLScanner {
   private int yychar;
 
   /**
-   * the number of characters from the last newline up to the start of the 
+   * the number of characters from the last newline up to the start of the
    * matched text
    */
   private int yycolumn;
 
-  /** 
+  /**
    * zzAtBOL == true iff the scanner is currently at the beginning of a line
    */
   private boolean zzAtBOL = true;
@@ -437,8 +436,8 @@ class PSQLScanner {
 
   /** denotes if the user-EOF-code has already been executed */
   private boolean zzEOFDone;
-  
-  /** 
+
+  /**
    * The number of occupied positions in zzBuffer beyond zzEndRead.
    * When a lead/high surrogate has been read from the input stream
    * into the final zzBuffer position, this will have a value of 1;
@@ -469,7 +468,7 @@ class PSQLScanner {
   }
 
 
-  /** 
+  /**
    * Unpacks the compressed character translation table.
    *
    * @param packed   the packed character translation table
@@ -492,7 +491,7 @@ class PSQLScanner {
    * Refills the input buffer.
    *
    * @return      <code>false</code>, iff there was new input.
-   * 
+   *
    * @exception   java.io.IOException  if any I/O-Error occurs
    */
   private boolean zzRefill() throws java.io.IOException {
@@ -549,7 +548,7 @@ class PSQLScanner {
     return true;
   }
 
-    
+
   /**
    * Closes the input stream.
    */
@@ -566,13 +565,13 @@ class PSQLScanner {
    * Resets the scanner to read from a new input stream.
    * Does not close the old reader.
    *
-   * All internal variables are reset, the old input stream 
+   * All internal variables are reset, the old input stream
    * <b>cannot</b> be reused (internal buffer is discarded and lost).
    * Lexical state is set to <tt>ZZ_INITIAL</tt>.
    *
    * Internal scan buffer is resized down to its initial length, if it has grown.
    *
-   * @param reader   the new input stream 
+   * @param reader   the new input stream
    */
   public final void yyreset(java.io.Reader reader) {
     zzReader = reader;
@@ -616,12 +615,12 @@ class PSQLScanner {
 
 
   /**
-   * Returns the character at position <tt>pos</tt> from the 
-   * matched text. 
-   * 
+   * Returns the character at position <tt>pos</tt> from the
+   * matched text.
+   *
    * It is equivalent to yytext().charAt(pos), but faster
    *
-   * @param pos the position of the character to fetch. 
+   * @param pos the position of the character to fetch.
    *            A value from 0 to yylength()-1.
    *
    * @return the character at position pos
@@ -642,8 +641,8 @@ class PSQLScanner {
   /**
    * Reports an error that occured while scanning.
    *
-   * In a wellformed scanner (no or only correct usage of 
-   * yypushback(int) and a match-all fallback rule) this method 
+   * In a wellformed scanner (no or only correct usage of
+   * yypushback(int) and a match-all fallback rule) this method
    * will only be called with things that "Can't Possibly Happen".
    * If this method is called, something is seriously wrong
    * (e.g. a JFlex bug producing a faulty scanner etc.).
@@ -663,7 +662,7 @@ class PSQLScanner {
     }
 
     throw new Error(message);
-  } 
+  }
 
 
   /**
@@ -756,9 +755,9 @@ class PSQLScanner {
           zzEndReadL = zzEndRead;
           zzMarkedPosL = zzMarkedPos;
           zzBufferL = zzBuffer;
-          if (eof) 
+          if (eof)
             zzPeek = false;
-          else 
+          else
             zzPeek = zzBufferL[zzMarkedPosL] == '\n';
         }
         if (zzPeek) yyline--;
@@ -766,7 +765,7 @@ class PSQLScanner {
       zzAction = -1;
 
       zzCurrentPosL = zzCurrentPos = zzStartRead = zzMarkedPosL;
-  
+
       zzState = ZZ_LEXSTATE[zzLexicalState];
 
       // set up zzAction for empty match case:
@@ -778,7 +777,7 @@ class PSQLScanner {
 
       zzForAction: {
         while (true) {
-    
+
           if (zzCurrentPosL < zzEndReadL) {
             zzInput = Character.codePointAt(zzBufferL, zzCurrentPosL, zzEndReadL);
             zzCurrentPosL += Character.charCount(zzInput);
@@ -829,69 +828,69 @@ class PSQLScanner {
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
-          case 1: 
+          case 1:
             { System.out.print(yytext());
-            } 
+            }
             // fall through
           case 14: break;
-          case 2: 
+          case 2:
             { /* ignore empty lines */
-            } 
+            }
             // fall through
           case 15: break;
-          case 3: 
+          case 3:
             { command.append('\"');
-            } 
+            }
             // fall through
           case 16: break;
-          case 4: 
+          case 4:
             { command.append( yytext() );
-            } 
+            }
             // fall through
           case 17: break;
-          case 5: 
+          case 5:
             { command.append(' ');
-            } 
+            }
             // fall through
           case 18: break;
-          case 6: 
+          case 6:
             { command.append('\n');
-            } 
+            }
             // fall through
           case 19: break;
-          case 7: 
+          case 7:
             { /* ignore comments*/
-            } 
+            }
             // fall through
           case 20: break;
-          case 8: 
+          case 8:
             { yybegin(YYINITIAL); command.append(yytext()); return commands.add(command.toString())?1:0;
-            } 
+            }
             // fall through
           case 21: break;
-          case 9: 
+          case 9:
             { command.append(yytext().replaceAll("\"","\\\""));
-            } 
+            }
             // fall through
           case 22: break;
-          case 10: 
+          case 10:
             { command.setLength(0); command.append( yytext() ); yybegin(COMMAND);
-            } 
+            }
             // fall through
           case 23: break;
-          case 11: 
+          case 11:
             { yybegin(DECLARE); command.append( yytext() );
-            } 
+            }
             // fall through
           case 24: break;
-          case 12: 
+          case 12:
             { command.setLength(0); command.append( yytext() ); yybegin(COPY);
-            } 
+            }
             // fall through
           case 25: break;
-          case 13: 
+          case 13:
             { command.setLength(0); command.append(yytext()); yybegin(COPYDATA);
-            } 
+            }
             // fall through
           case 26: break;
           default:
@@ -921,7 +920,7 @@ class PSQLScanner {
         firstFilePos = 2;
         encodingName = argv[1];
         try {
-          java.nio.charset.Charset.forName(encodingName); // Side-effect: is encodingName valid? 
+          java.nio.charset.Charset.forName(encodingName); // Side-effect: is encodingName valid?
         } catch (Exception e) {
           System.out.println("Invalid encoding '" + encodingName + "'");
           return;
