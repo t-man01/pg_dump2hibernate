@@ -34,7 +34,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/t-man01/pg_dump2hibernate.git</connection>
 		<developerConnection>scm:git:git@github.com:t-man01/pg_dump2hibernate.git</developerConnection>
-		<url>https://github.com/t-man01/pg_dump2hibernate</url>
+		<url>https://github.com/t-man01/pg_dump2hibernate.git</url>
 		<tag>pg_dump2hibernate-0.0.3</tag>
 	</scm>
 
