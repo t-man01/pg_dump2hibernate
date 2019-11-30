@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>pro.trautmann</groupId>
 	<artifactId>pg_dump2hibernate</artifactId>
@@ -32,9 +34,9 @@
 	</distributionManagement>
 
 	<scm>
+		<url>https://github.com/t-man01/pg_dump2hibernate.git</url>
 		<connection>scm:git:git://github.com/t-man01/pg_dump2hibernate.git</connection>
 		<developerConnection>scm:git:git@github.com:t-man01/pg_dump2hibernate.git</developerConnection>
-		<url>https://github.com/t-man01/pg_dump2hibernate.git</url>
 		<tag>pg_dump2hibernate-0.0.3</tag>
 	</scm>
 
