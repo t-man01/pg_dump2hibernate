@@ -21,7 +21,7 @@ I don't recommend this scenario for production environments. In this case think 
 1. Maven dependency to link to this project's artifact:
 ```xml
     <dependency>
-        <groupId>pro.tman</groupId>
+        <groupId>pro.trautmann</groupId>
         <artifactId>pg_dump2hibernate</artifactId>
         <version>0.0.8</version>
     </dependency>
@@ -31,7 +31,7 @@ I don't recommend this scenario for production environments. In this case think 
 ```xml
     <property
         name="hibernate.hbm2ddl.import_files_sql_extractor"
-	    value="pro.tman.pg.hibernate.PSQLCommandExtractor" />
+	    value="pro.trautmann.pg.hibernate.PSQLCommandExtractor" />
 ```
 
 3. Have pg_dump file available or create with `pg_dump -U <user> <database> > PGDUMP.sql`
@@ -63,7 +63,7 @@ I don't recommend this scenario for production environments. In this case think 
 			<!-- Set the extractor -->
 			<property
 				name="hibernate.hbm2ddl.import_files_sql_extractor"
-				value="pro.tman.pg.hibernate.PSQLCommandExtractor" />
+				value="pro.trautmann.pg.hibernate.PSQLCommandExtractor" />
 			<!-- Here goes your dump file -->
 			<property name="javax.persistence.sql-load-script-source"
 				value="META-INF/PGDUMP.sql" />
