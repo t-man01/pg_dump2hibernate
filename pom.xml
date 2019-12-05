@@ -6,7 +6,7 @@
 	<name>pg_dump2hibernate</name>
 	<description>translates a pg_dump sql file to jdbc commands for use with hibernate</description>
 	<url>https://github.com/t-man01/pg_dump2hibernate</url>
-	<version>0.0.8</version>
+	<version>0.0.9-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<licenses>
@@ -45,7 +45,7 @@
 		<url>https://github.com/t-man01/pg_dump2hibernate.git</url>
 		<connection>scm:git:https://github.com/t-man01/pg_dump2hibernate.git</connection>
 		<developerConnection>scm:git:https://github.com/t-man01/pg_dump2hibernate.git</developerConnection>
-		<tag>0.0.8</tag>
+		<tag>0.0.3</tag>
 	</scm>
 
 	<dependencies>
