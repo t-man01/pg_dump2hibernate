@@ -1,10 +1,13 @@
 /* A JFLex scanner for parsing postgresql dumps to extract jdbc commands*/
 
-package pro.tman.pg.hibernate;
+package pro.trautmann.pg.hibernate;
 
 import java.lang.StringBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 /**
 * This class is a PostgreSQL scanner for extracting jdbc commands.
@@ -24,29 +27,57 @@ import java.util.List;
 %{
   StringBuffer command = new StringBuffer();
   List<String> commands = new ArrayList<>();
+  String copyTable;
+  String copyColumns;
 
-  boolean isZzAtEOF() {
-    return zzAtEOF;
-  }
+  boolean isZzAtEOF() { return zzAtEOF; }
 
-  public List<String> getCommands(){
-    return this.commands;
-  }
+  public List<String> getCommands(){ return this.commands; }
+
+  public int appendCopyAsInsert(String copyData) {
+	String[] values = copyData.replaceAll("\"","'\"").replaceAll("\\\\N", "NULL").split("\t");
+	String valueString = Arrays.stream(values).map(t -> t.equals("NULL")?t:"'" + t + "'").collect( Collectors.joining( ", " ) );
+	StringBuffer insert = new StringBuffer();
+	insert.append("INSERT INTO ")
+		.append(copyTable)
+		.append(copyColumns)
+	  	.append(" VALUES (")
+	  	.append(valueString)
+	  	.append(");\n");
+	return commands.add(insert.toString())?1:0;
+	}
+
+	public void appendToCommand(String yytext) { this.command.append(yytext); }
+
+	public void appendToCommand(char yytext) { this.command.append(yytext); }
+
+	public void resetCommand() { command.setLength(0); }
+
+	public void copyTable(String yytext) { this.copyTable = yytext; }
+
+	public void copyColumns(String yytext) { this.copyColumns = yytext; }
+
+	public int appendAndAddCommand(String yytext) {
+		this.command.append(yytext);
+		return this.commands.add(this.command.toString())?1:0;
+	}
+
 %}
 
 LineTerminator 	   = \r|\n|\r\n
 InputCharacter 	   = [^\r\n]
 NoEOCMD 		   = [^\r\n\$;]
 NoEODCL 		   = [^\r\n\$]
+NoEOCPY			   = [^\r\n\$;\(\)]
 WhiteSpace     	   = {LineTerminator} | [ \t\f]
 
 /* comments */
 Comment 			= "\-\-" {InputCharacter}* {LineTerminator}?
-EndOfCommand 		= ";" {LineTerminator}
-SqlCommandToken 	= ("SET " | "SELECT " | "CREATE " | "COMMENT " | "ALTER " | "DELETE "| "REVOKE " | "GRANT ") {NoEOCMD}*
+EndOfCommand 		= ";" {LineTerminator}?
+SqlCommandToken 	= ("DROP " | "SET " | "SELECT " | "CREATE " | "COMMENT " | "ALTER " | "DELETE "| "REVOKE " | "GRANT ") {NoEOCMD}*
 DeclareToken		= [\$]+ "DECLARE"
 EndOfDeclare		= [\$]+ {EndOfCommand}
-CopyToken 			= "COPY" {NoEOCMD}+ "FROM stdin;" {LineTerminator}?
+CopyToken 			= "COPY "
 BeginToken			= "BEGIN"
 EndOfBegin			= "END"
 Quote				= "\""
@@ -54,7 +85,7 @@ EndOfCopy			= "\\\." {LineTerminator}?
 
 
 %state COMMAND, COPY, DECLARE
-%xstate COPYDATA
+%xstate INSERT, COPYDATA
 
 %%
  /* keywords */
@@ -62,34 +93,42 @@ EndOfCopy			= "\\\." {LineTerminator}?
 <YYINITIAL> {
   {Comment}			{ /* ignore comments*/ }
   {WhiteSpace}		{ /* ignore empty lines */ }
-  {SqlCommandToken}	{ command.setLength(0); command.append( yytext() ); yybegin(COMMAND); }
-  {CopyToken}			{ command.setLength(0); command.append( yytext() ); yybegin(COPY); }
+  {SqlCommandToken}	{ resetCommand(); appendToCommand( yytext() ); yybegin(COMMAND); }
+  {CopyToken}		{ resetCommand(); appendToCommand( yytext() ); yybegin(COPY); }
 }
 
 /* in any state but exclusive COPYDATA... */
 /* tabs and newlines will be transferred to white space */
-{WhiteSpace}+		{ command.append(' '); }
-{LineTerminator}	{ command.append(' '); }
-{Quote}             { command.append('\"'); }
+{WhiteSpace}+		{ appendToCommand(' '); }
+{LineTerminator}	{ appendToCommand(' '); }
+{Quote}             { appendToCommand('\"'); }
 
 <COMMAND>{
-  {NoEOCMD}+			{ command.append( yytext() ); }
-  {DeclareToken}		{ yybegin(DECLARE); command.append( yytext() ); }
-  {EndOfCommand}		{ yybegin(YYINITIAL); command.append(yytext()); return commands.add(command.toString())?1:0; }
+  {NoEOCMD}+			{ appendToCommand( yytext() ); }
+  {DeclareToken}		{ yybegin(DECLARE); appendToCommand( yytext() ); }
+  {EndOfCommand}		{ yybegin(YYINITIAL); return appendAndAddCommand(yytext()); }
 }
 
 <DECLARE>{
-  {NoEODCL}+			{ command.append( yytext() ); }
-  {EndOfDeclare}		{ yybegin(YYINITIAL); command.append(yytext()); return commands.add(command.toString())?1:0; }
+  {NoEODCL}+			{ appendToCommand( yytext() ); }
+  {EndOfDeclare}		{ yybegin(YYINITIAL); return appendAndAddCommand(yytext()); }
 
 }
 
 <COPY> {
-  {CopyToken}			{ command.setLength(0); command.append(yytext()); yybegin(COPYDATA);  }
-  <COPYDATA> {
-    [\w]+ {InputCharacter}+ {LineTerminator} { command.append(yytext().replaceAll("\"","\\\"")); }
-    {LineTerminator}	{ command.append('\n'); }
-    {EndOfCopy}		{ yybegin(YYINITIAL); command.append(yytext()); return commands.add(command.toString())?1:0; }
-  }
+  {CopyToken}			{ resetCommand(); }
+  {NoEOCPY}+ 			{ copyTable(yytext()); }
+  "\(" ~"\)"			{ copyColumns(yytext()); }
+  " FROM stdin;" {LineTerminator}? {yybegin(INSERT); }
 }
 
+<COPYDATA> {
+    [\w]+ {InputCharacter}+ {LineTerminator} { ; }
+    {LineTerminator}	{ appendToCommand('\n'); }
+    {EndOfCopy}			{ yybegin(YYINITIAL); return appendAndAddCommand(yytext()); }
+ }
+
+ <INSERT> {
+  	[\w]+ {InputCharacter}+	{ return appendCopyAsInsert(yytext()); }
+  	{EndOfCopy}			{ yybegin(YYINITIAL); }
+ }
